@@ -137,6 +137,7 @@ const init = async () => {
         message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       newResponse.code(500);
+      console.error(response);
       return newResponse;
     }
 
