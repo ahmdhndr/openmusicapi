@@ -1,0 +1,31 @@
+/* eslint-disable camelcase */
+
+exports.up = (pgm) => {
+  // membuat user baru.
+  pgm.sql(
+    // eslint-disable-next-line comma-dangle
+    "INSERT INTO users(id, username, password, fullname) VALUES ('old_playlist', 'old_playlist', 'old_playlist', 'old playlist')"
+  );
+
+  // mengubah nilai owner pada playlist yang owner-nya bernilai NULL
+  pgm.sql("UPDATE playlists SET owner = 'old_playlists' WHERE owner = NULL");
+
+  // memberikan constraint foreign key pada owner terhadap kolom id dari tabel users
+  pgm.addConstraint(
+    'playlists',
+    'fk_playlists.owner_users.id',
+    // eslint-disable-next-line comma-dangle
+    'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE'
+  );
+};
+
+exports.down = (pgm) => {
+  // menghapus constraint fk_playlists.owner_users.id pada tabel playlists
+  pgm.dropConstraint('playlists', 'fk_playlists.owner_users.id');
+
+  // mengubah nilai owner old_playlists pada playlist menjadi NULL
+  pgm.sql("UPDATE playlists SET owner = NULL WHERE owner = 'old_playlists'");
+
+  // menghapus user baru.
+  pgm.sql("DELETE FROM users WHERE id = 'old_playlists'");
+};
