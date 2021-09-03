@@ -39,7 +39,7 @@ class UsersService {
 
     // jika result.rows.length > 0, bangkitkan error
     // karena itu berarti username sudah digunakan
-    if (result.rows.length > 0) {
+    if (result.rowCount) {
       throw new InvariantError('Gagal menambahkan user. Username sudah digunakan.');
     }
   }

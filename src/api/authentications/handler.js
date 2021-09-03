@@ -35,8 +35,7 @@ class AuthenticationsHandler {
     return response;
   }
 
-  // eslint-disable-next-line no-unused-vars
-  async putAuthenticationHandler(request, h) {
+  async putAuthenticationHandler(request) {
     this._validator.validatePutAuthenticationPayload(request.payload);
     // dapatkan nilai refreshToken setelah divalidasi
     const { refreshToken } = request.payload;
@@ -55,8 +54,7 @@ class AuthenticationsHandler {
     };
   }
 
-  // eslint-disable-next-line no-unused-vars
-  async deleteAuthenticationHandler(request, h) {
+  async deleteAuthenticationHandler(request) {
     this._validator.validateDeleteAuthenticationPayload(request.payload);
     // dapatkan nilai refreshToken setelah divalidasi
     const { refreshToken } = request.payload;

@@ -18,6 +18,7 @@
                 "allowAfterThisConstructor": true,
                 "allowAfterThis": true
             }
-        ]
+        ],
+        "object-curly-newline": "off"
     }
 }
