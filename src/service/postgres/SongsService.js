@@ -9,7 +9,6 @@ class SongsService {
     this._pool = new Pool();
   }
 
-  // eslint-disable-next-line object-curly-newline
   async addSong({ title, year, performer, genre, duration }) {
     const id = `song-${nanoid(16)}`;
     const insertedAt = new Date().toISOString();
@@ -29,10 +28,7 @@ class SongsService {
   }
 
   async getSongs() {
-    const result = await this._pool.query(
-      // eslint-disable-next-line comma-dangle
-      'SELECT id, title, performer FROM songs'
-    );
+    const result = await this._pool.query('SELECT id, title, performer FROM songs');
     return result.rows;
   }
 
@@ -43,7 +39,6 @@ class SongsService {
     };
 
     const result = await this._pool.query(query);
-
     if (!result.rowCount) {
       throw new NotFoundError('Lagu tidak ditemukan');
     }
@@ -51,7 +46,6 @@ class SongsService {
     return result.rows.map(mapDBToModel)[0];
   }
 
-  // eslint-disable-next-line object-curly-newline
   async editSongById(id, { title, year, performer, genre, duration }) {
     const updatedAt = new Date().toISOString();
     const query = {
@@ -60,7 +54,6 @@ class SongsService {
     };
 
     const result = await this._pool.query(query);
-
     if (!result.rowCount) {
       throw new NotFoundError('Gagal memperbarui lagu. Id tidak ditemukan');
     }
@@ -73,7 +66,6 @@ class SongsService {
     };
 
     const result = await this._pool.query(query);
-
     if (!result.rowCount) {
       throw new NotFoundError('Gagal menghapus lagu. Id tidak ditemukan');
     }

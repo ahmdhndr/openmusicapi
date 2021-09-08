@@ -35,6 +35,11 @@ const collaborations = require('./api/collaborations');
 const CollaborationsService = require('./service/postgres/CollaborationsService');
 const CollaborationsValidator = require('./validator/collaborations');
 
+// Exports
+const _exports = require('./api/exports');
+const ProducerService = require('./service/rabbitmq/ProducerService');
+const ExportsValidator = require('./validator/exports');
+
 const init = async () => {
   const songsService = new SongsService();
   const usersService = new UsersService();
@@ -124,22 +129,28 @@ const init = async () => {
         validator: CollaborationsValidator,
       },
     },
+    {
+      plugin: _exports,
+      options: {
+        service: ProducerService,
+        playlistsService,
+        validator: ExportsValidator,
+      },
+    },
   ]);
 
   server.ext('onPreResponse', (request, h) => {
-    // mendapatkan konteks response dari request
     const { response } = request;
 
     if (response instanceof ClientError) {
-      // membuat response baru dari response toolkit sesuai kebutuhan error handling
       const newResponse = h.response({
         status: 'fail',
         message: response.message,
       });
       newResponse.code(response.statusCode);
       return newResponse;
-      // eslint-disable-next-line no-else-return
     }
+
     if (response instanceof Error) {
       const { statusCode, payload } = response.output;
       if (statusCode === 401) {
@@ -155,7 +166,6 @@ const init = async () => {
       return newResponse;
     }
 
-    // jika bukan ClientError, lanjutkan dengan response sebenarnya (tanpa intervensi)
     return response.continue || response;
   });
 

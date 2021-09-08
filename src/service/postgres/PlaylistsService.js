@@ -12,12 +12,13 @@ class PlaylistsService {
 
   async addPlaylist({ name, owner }) {
     const id = `playlist-${nanoid(16)}`;
+
     const query = {
       text: 'INSERT INTO playlists VALUES($1, $2, $3) RETURNING id',
       values: [id, name, owner],
     };
-    const result = await this._pool.query(query);
 
+    const result = await this._pool.query(query);
     if (!result.rows[0].id) {
       throw new InvariantError('Playlist gagal ditambahkan');
     }
@@ -33,6 +34,7 @@ class PlaylistsService {
       WHERE playlists.owner = $1 OR collaborations.user_id = $1`,
       values: [owner],
     };
+
     const result = await this._pool.query(query);
     return result.rows;
   }
@@ -42,6 +44,7 @@ class PlaylistsService {
       text: 'DELETE FROM playlists WHERE id = $1 RETURNING id',
       values: [id],
     };
+
     const result = await this._pool.query(query);
     if (!result.rowCount) {
       throw new NotFoundError('Playlist gagal dihapus. Id tidak ditemukan');
@@ -53,14 +56,13 @@ class PlaylistsService {
       text: 'SELECT owner FROM playlists WHERE id = $1',
       values: [id],
     };
+
     const result = await this._pool.query(query);
     if (!result.rowCount) {
       throw new NotFoundError('Playlist tidak ditemukan');
     }
 
     const playlist = result.rows[0];
-    // Cek nilai owner yg ada di db
-    // bandingkan dengan nilai owner yg ada pada parameter
     if (playlist.owner !== owner) {
       throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
     }

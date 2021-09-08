@@ -11,10 +11,10 @@ class AuthenticationsService {
       text: 'INSERT INTO authentications VALUES($1)',
       values: [token],
     };
+
     await this._pool.query(query);
   }
 
-  // Fungsi ini untuk mengecek keberadaan token di dalam db
   async verifyRefreshToken(token) {
     const query = {
       text: 'SELECT token FROM authentications WHERE token = $1',
@@ -34,6 +34,7 @@ class AuthenticationsService {
       text: 'DELETE FROM authentications WHERE token = $1',
       values: [token],
     };
+
     await this._pool.query(query);
   }
 }
