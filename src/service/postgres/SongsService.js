@@ -10,13 +10,13 @@ class SongsService {
     this._cacheService = cacheService;
   }
 
-  async addSong({ title, year, performer, genre, duration }) {
+  async addSong(payload) {
     const id = `song-${nanoid(16)}`;
     const insertedAt = new Date().toISOString();
 
     const query = {
       text: 'INSERT INTO songs VALUES($1, $2, $3, $4, $5, $6, $7, $7) RETURNING id',
-      values: [id, title, year, performer, genre, duration, insertedAt],
+      values: [id, ...Object.values(payload), insertedAt],
     };
 
     const result = await this._pool.query(query);

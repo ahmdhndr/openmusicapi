@@ -8,11 +8,11 @@ class PlaylistsHandler {
     this.deletePlaylistByIdHandler = this.deletePlaylistByIdHandler.bind(this);
   }
 
-  async postPlaylistHandler(request, h) {
-    this._validator.validatePlaylistPayload(request.payload);
+  async postPlaylistHandler({ payload, auth }, h) {
+    this._validator.validatePlaylistPayload(payload);
 
-    const { name } = request.payload;
-    const { id: credentialId } = request.auth.credentials;
+    const { name } = payload;
+    const { id: credentialId } = auth.credentials;
 
     const playlistId = await this._service.addPlaylist({
       name,
